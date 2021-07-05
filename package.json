@@ -1,0 +1,37 @@
+{
+  "name": "casiibro_se_points",
+  "version": "1.0.0",
+  "description": "NodeJS app to test game (coinflip) with StreamElements points.",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YoNeXia/Casiibro_Test.git"
+  },
+  "keywords": [
+    "node",
+    "nodejs",
+    "casiibro",
+    "streamelements",
+    "game",
+    "points",
+    "coinflip"
+  ],
+  "author": "YoNeXia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YoNeXia/Casiibro_Test/issues"
+  },
+  "homepage": "https://github.com/YoNeXia/Casiibro_Test#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bootstrap": "^5.0.2",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.9",
+    "readline": "^1.3.0"
+  }
+}
