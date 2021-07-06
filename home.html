@@ -36,7 +36,8 @@
             -webkit-perspective: 300px;
             perspective: 300px;
         }
-        .coin{
+
+        .coin {
             height: 150px;
             width: 150px;
             position: relative;
@@ -44,51 +45,60 @@
             -webkit-transform-style: preserve-3d;
             transform-style: preserve-3d;
         }
-        .coin img{
+
+        .coin img {
             width: 145px;
         }
-        .heads,.tails{
+
+        .heads, .tails {
             position: absolute;
             width: 100%;
             height: 100%;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
         }
-        .tails{
+
+        .tails {
             transform: rotateX(180deg);
         }
-        @keyframes spin-tails{
-            0%{
+
+        @keyframes spin-tails {
+            0% {
                 transform: rotateX(0);
             }
-            100%{
+            100% {
                 transform: rotateX(1980deg);
             }
         }
-        @keyframes spin-heads{
-            0%{
+
+        @keyframes spin-heads {
+            0% {
                 transform: rotateX(0);
             }
-            100%{
+            100% {
                 transform: rotateX(2160deg);
             }
         }
-        .buttons{
+
+        .buttons {
             justify-content: space-between;
             text-align: center;
         }
-        button{
+
+        button {
             width: 120px;
             padding: 10px 0;
             border: 2.5px solid #424ae0;
             border-radius: 5px;
             cursor: pointer;
         }
-        #flip-button{
+
+        #flip-button {
             background-color: #424ae0;
             color: #ffffff;
         }
-        #flip-button:disabled{
+
+        #flip-button:disabled {
             background-color: #e1e0ee;
             border-color: #e1e0ee;
             color: #101020;
@@ -99,6 +109,12 @@
 
 <body>
 <div class="container">
+    <div class="stats">
+        <p id="points-count">Points: 0</p>
+        <form>
+            Username: <input type="username" name="username" id="username"/>
+        </form>
+    </div>
     <div class="coin" id="coin">
         <div class="heads">
             <img src="https://raw.githubusercontent.com/YoNeXia/Casiibro_Test/23da4200454ab0284bf5acf8f3f69df67398fb35/heads.svg">
@@ -113,6 +129,58 @@
         </button>
     </div>
 </div>
+
+<script>
+    let points;
+    let coin = document.querySelector(".coin");
+    let flipBtn = document.querySelector("#flip-button");
+
+    flipBtn.addEventListener("click", () => {
+        let username = document.querySelector("#username").value;
+
+        console.log(username)
+        coin.style.animation = "none";
+
+        fetch('/flip?username=' + username.toString().toLowerCase(), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                return response.json()
+            }).then(function (json) {
+            console.log(json)
+            points = json.points;
+            if (json.answer == 'win') {
+                setTimeout(function () {
+                    coin.style.animation = "spin-heads 3s forwards";
+                }, 100);
+            } else {
+                setTimeout(function () {
+                    coin.style.animation = "spin-tails 3s forwards";
+                }, 100);
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+
+        setTimeout(updateStats, 3000);
+        disableButton();
+    });
+
+    function updateStats() {
+        document.querySelector("#points-count").textContent = `Points: ${points}`;
+    }
+
+    function disableButton() {
+        flipBtn.disabled = true;
+        setTimeout(function () {
+            flipBtn.disabled = false;
+        }, 3000);
+    };
+</script>
 
 </body>
 </html>
