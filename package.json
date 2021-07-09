@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "NodeJS app to test game (coinflip) with StreamElements points.",
   "main": "index.js",
+  "bin": "index.js",
+  "pkg": {
+    "assets": "*"
+  },
   "scripts": {
     "test": "nodemon index.js",
     "start": "node index.js"
