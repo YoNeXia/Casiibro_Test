@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <!-- Set main information of HTML page -->
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casiibro CoinFlip</title>
 
+    <!-- Get Lato font from Google -->
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 
+    <!-- Add CSS to the HTML page -->
     <style>
         * {
             padding: 0;
@@ -109,12 +112,14 @@
 
 <body>
 <div class="container">
+    <!-- Display username and his points -->
     <div class="stats">
         <p id="points-count">Points: 0</p>
         <form>
             Username: <input type="username" name="username" id="username"/>
         </form>
     </div>
+    <!-- Display coin -->
     <div class="coin" id="coin">
         <div class="heads">
             <img src="https://raw.githubusercontent.com/YoNeXia/Casiibro_Test/d0e3e5f849b806fcbf6c2cee5980cc14bb9b1987/heads.svg">
@@ -123,6 +128,7 @@
             <img src="https://raw.githubusercontent.com/YoNeXia/Casiibro_Test/d0e3e5f849b806fcbf6c2cee5980cc14bb9b1987/tails.svg">
         </div>
     </div>
+    <!-- Display button to flip coin -->
     <div class="buttons">
         <button id="flip-button">
             Flip Coin
@@ -131,16 +137,19 @@
 </div>
 
 <script>
+    // Set up variables
     let points;
     let coin = document.querySelector(".coin");
     let flipBtn = document.querySelector("#flip-button");
 
+    // Event listener triggered when user click on button
     flipBtn.addEventListener("click", () => {
+        // Get username value from form
         let username = document.querySelector("#username").value;
-
-        console.log(username)
+        // Set coin animation to null
         coin.style.animation = "none";
 
+        // Make server call with link /flip and username parameter
         fetch('/flip?username=' + username.toString().toLowerCase(), {
             method: 'GET',
             headers: {
@@ -148,32 +157,44 @@
                 'Content-Type': 'application/json'
             }
         })
+            // Get answer from server and convert it to JSON
             .then(response => {
                 return response.json()
             }).then(function (json) {
+            // Display JSON response
             console.log(json)
+            // Change points value by points value in JSON response
             points = json.points;
+            // Check response result
             if (json.answer == 'win') {
+                // Spin coin to display win
                 setTimeout(function () {
                     coin.style.animation = "spin-heads 3s forwards";
                 }, 100);
             } else {
+                // Spin coin to display loose
                 setTimeout(function () {
                     coin.style.animation = "spin-tails 3s forwards";
                 }, 100);
             }
-        }).catch(err => {
-            console.log(err);
-        });
+        })
+            // Display any error on server request
+            .catch(err => {
+                console.log(err);
+            });
 
+        // Update points value displaying
         setTimeout(updateStats, 3000);
+        // Disable flip button during coin flip
         disableButton();
     });
 
+    // Change points value displaying on HTML page
     function updateStats() {
         document.querySelector("#points-count").textContent = `Points: ${points}`;
     }
 
+    // Disable button during coin flip
     function disableButton() {
         flipBtn.disabled = true;
         setTimeout(function () {
